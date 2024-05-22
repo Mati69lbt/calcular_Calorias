@@ -83,7 +83,11 @@ Sigue estos pasos para configurar el proyecto localmente:
 
 ## Despliegue
 
-_Agrega aquí el enlace al despliegue de tu aplicación si la has desplegado en algún servicio como Vercel, Netlify, etc._
+La aplicación está desplegada y disponible en la siguiente URL:
+
+[Contador de Calorías - Despliegue](https://controlcalorias.netlify.app/)
+
+Haz clic en el enlace para ver la aplicación en acción.
 
 ## Uso de useRef
 
