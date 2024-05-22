@@ -1,5 +1,12 @@
 // cspell: ignore Categoria, Calorias, uuidv4, Aqui
-import { useState, ChangeEvent, FormEvent, Dispatch, useEffect } from "react";
+import {
+  useState,
+  ChangeEvent,
+  FormEvent,
+  Dispatch,
+  useEffect,
+  useRef,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
 import { categories } from "../data/categories";
 import { Activity } from "../types";
@@ -8,6 +15,7 @@ import { ActivityActions, ActivityState } from "../reducers/activity-reducer";
 type FormProps = {
   dispatch: Dispatch<ActivityActions>;
   state: ActivityState;
+  formRef: React.RefObject<HTMLFormElement>;
 };
 
 const initialState: Activity = {
@@ -17,8 +25,10 @@ const initialState: Activity = {
   calories: 0,
 };
 
-const Form = ({ dispatch, state }: FormProps) => {
+const Form = ({ dispatch, state, formRef }: FormProps) => {
   const [activity, setActivity] = useState<Activity>(initialState);
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (state.activeId) {
@@ -26,6 +36,9 @@ const Form = ({ dispatch, state }: FormProps) => {
         (stateActivity) => stateActivity.id === state.activeId
       )[0];
       setActivity(selectActivity);
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
     }
   }, [state.activeId]);
 
@@ -52,6 +65,9 @@ const Form = ({ dispatch, state }: FormProps) => {
 
   return (
     <form
+      ref={formRef}
+      
+
       className="space-y-5 bg-white shadow p-10 rounded-lg"
       onSubmit={handleSubmit}
     >
@@ -78,6 +94,7 @@ const Form = ({ dispatch, state }: FormProps) => {
           Actividad:
         </label>
         <input
+          ref={inputRef}
           type="text"
           id="name"
           className="border border-slate-300 p-2 rounded-lg"

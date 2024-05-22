@@ -1,6 +1,6 @@
 // cspell: ignore Calorias
 
-import { useEffect, useMemo, useReducer } from "react";
+import { useEffect, useMemo, useReducer, useRef } from "react";
 import Form from "./components/Form";
 import { activityReducer, initialState } from "./reducers/activity-reducer";
 import ActivityList from "./components/ActivityList";
@@ -8,6 +8,8 @@ import CalorieTracker from "./components/CalorieTracker";
 
 function App() {
   const [state, dispatch] = useReducer(activityReducer, initialState);
+
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     localStorage.setItem("activities", JSON.stringify(state?.activities));
@@ -34,7 +36,7 @@ function App() {
       </header>
       <section className="bg-lime-500 py-20 px-5">
         <div className="max-w-4xl mx-auto">
-          <Form dispatch={dispatch} state={state} />
+          <Form dispatch={dispatch} state={state} formRef={formRef} />
         </div>
       </section>
       <section className="bg-gray-800 py-10">
@@ -43,7 +45,11 @@ function App() {
         </div>
       </section>
       <section className="p-10 mx-auto max-w-4x">
-        <ActivityList activities={state.activities} dispatch={dispatch} />
+        <ActivityList
+          activities={state.activities}
+          dispatch={dispatch}
+          formRef={formRef}
+        />
       </section>
     </>
   );

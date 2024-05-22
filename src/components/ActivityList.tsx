@@ -1,6 +1,6 @@
 // cspell: ignore Calorias, heroicons
 
-import { Dispatch, useMemo } from "react";
+import { Dispatch, RefObject, useMemo } from "react";
 import { Activity } from "../types";
 import { categories } from "../data/categories";
 import { PencilSquareIcon, XCircleIcon } from "@heroicons/react/24/solid";
@@ -9,14 +9,24 @@ import { ActivityActions } from "../reducers/activity-reducer";
 type ActivityListProps = {
   activities: Activity[];
   dispatch: Dispatch<ActivityActions>;
+  formRef: RefObject<HTMLFormElement>;
+  
 };
 
-const ActivityList = ({ activities, dispatch }: ActivityListProps) => {
+const ActivityList = ({ activities, dispatch, formRef }: ActivityListProps) => {
   const categoryName = useMemo(
     () => (category: Activity["category"]) =>
       categories.map((cat) => (cat.id === category ? cat.name : "")),
     [activities]
   );
+
+  const handleEditClick = (id: string) => {
+    dispatch({
+      type: "set-activeId",
+      payload: { id },
+    });
+    formRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <>
@@ -58,14 +68,7 @@ const ActivityList = ({ activities, dispatch }: ActivityListProps) => {
               >
                 <PencilSquareIcon className="h-8 w-8 text-gray-800" />
               </button>
-              <button
-                onClick={() =>
-                  dispatch({
-                    type: "delete-activity",
-                    payload: { id: activity.id },
-                  })
-                }
-              >
+              <button onClick={() => handleEditClick(activity.id)}>
                 <XCircleIcon className="h-8 w-8 text-red-500" />
               </button>
             </div>
